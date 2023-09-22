@@ -18,6 +18,7 @@ interface WorkItem {
 }
 
 interface WorkItemDetails {
+    id: string;
     fields: {
         'System.State': string;
         'System.Title': string;
@@ -63,7 +64,7 @@ export async function POST({ request }) {
                 'Content-Type': 'application/json'
             }
         });
-        return response.data;
+        return { id: item['url'].split('/').pop(), ...response.data }; // Include the ID in the returned object
     }));
 
     // Filter closed work items
@@ -72,7 +73,7 @@ export async function POST({ request }) {
     // Create changelog
     const messages = [
         { "role": "system", "content": "You are a helpful assistant." },
-        { "role": "user", "content": "Create a changelog from the following closed work items: " + closedWorkItems.map(item => item['fields']['System.Title']).join(', ') + ". Make it a short comprehensive list in dutch so the end user can see the improvement we made with this release" },
+        { "role": "user", "content": "Create a changelog from the following closed work items: " + closedWorkItems.map(item => `#${item.id} - ${item['fields']['System.Title']}`).join(', ') + ". Make it a short comprehensive list in dutish so the end user can see the improvement we made with this release" },
     ];
     console.log(model);
 
