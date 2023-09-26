@@ -73,7 +73,7 @@ export async function POST({ request }) {
     // Create changelog
     const messages = [
         { "role": "system", "content": "You are a helpful assistant." },
-        { "role": "user", "content": "Create a changelog from the following closed work items: " + closedWorkItems.map(item => `#${item.id} - ${item['fields']['System.Title']}`).join(', ') + ". Make it a short comprehensive list in dutish so the end user can see the improvement we made with this release" },
+        { "role": "user", "content": "Create a changelog from the following closed work items: " + closedWorkItems.map(item => `#${item.id} - ${item['fields']['System.Title']}`).join(', ') + ". Include the work item ID after each line. Make it a short comprehensive list in Dutch so the end user can see the improvement we made with this release" },
     ];
     console.log(model);
 

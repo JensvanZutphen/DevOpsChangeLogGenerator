@@ -43,11 +43,14 @@
     let openaiUrl = "";
     let ApiKey = "";
     let queryLink = "";
-    let patToken = ""; // Add this line
+    let patToken = "";
     let message = "";
     let messageStore = writable(""); // Use a Svelte store for message
+    let isLoading = false; 
+
 
     async function handleSubmit() {
+        isLoading = true; // Set loading state to true when form is submitted
         const response = await fetch("/api/changelog", {
             method: "POST",
             headers: {
@@ -57,12 +60,12 @@
                 ApiKey,
                 queryLink,
                 patToken,
-                model: selected, // Add this line
+                model: selected,
             }),
         });
         const data = await response.json();
-        console.log(data.message);
         messageStore.set(data.message); // Update the store
+        isLoading = false; // Set loading state to false when response is received
     }
 
     // Function to download the changelog
@@ -133,6 +136,10 @@
     >
     <Button type="submit" variant="primary">Generate Changelog</Button>
 </form>
+
+{#if isLoading}
+    <Label>Loading...</Label>
+{/if}
 
 {#if $messageStore}
     <!-- Use the reactive variable in the if statement -->
