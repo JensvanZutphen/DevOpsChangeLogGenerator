@@ -9,7 +9,9 @@ interface RequestData {
     ApiKey: string;
     queryLink: string;
     patToken: string;
-    model: string; // Add this line
+    model: string;
+    includeDescription: boolean;
+    includeHistory: boolean;
 }
 
 
@@ -22,11 +24,13 @@ interface WorkItemDetails {
     fields: {
         'System.State': string;
         'System.Title': string;
+        'System.Description'?: string; // Optional
+        'System.History'?: string; // Optional
     };
 }
 
 export async function POST({ request }) {
-    const { ApiKey, queryLink, patToken, model }: RequestData = await request.json(); // Include model here
+    const { ApiKey, queryLink, patToken, model, includeDescription, includeHistory }: RequestData = await request.json();
 
     // Extract organization, project, and id from the provided URL
     const url = new URL(queryLink);
@@ -58,13 +62,21 @@ export async function POST({ request }) {
 
     // Fetch work item details
     const workItemDetails: WorkItemDetails[] = await Promise.all(data['workItems'].map(async (item: WorkItem) => {
-        const response = await axios.get(item['url'], {
+        const response = await axios.get(`${item['url']}?$expand=all`, {
             headers: {
                 'Authorization': `Basic ${Buffer.from(`:${patToken}`).toString('base64')}`,
                 'Content-Type': 'application/json'
             }
         });
-        return { id: item['url'].split('/').pop(), ...response.data }; // Include the ID in the returned object
+        return {
+            id: item['url'].split('/').pop(),
+            fields: {
+                'System.State': response.data.fields['System.State'],
+                'System.Title': response.data.fields['System.Title'],
+                'System.Description': includeDescription ? response.data.fields['System.Description'] : undefined,
+                'System.History': includeHistory ? response.data.fields['System.History'] : undefined
+            }
+        };
     }));
 
     // Filter closed work items

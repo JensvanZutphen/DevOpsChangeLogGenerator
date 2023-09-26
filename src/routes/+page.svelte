@@ -6,7 +6,10 @@
         Select,
         Button,
         Textarea,
+        Checkbox
     } from "flowbite-svelte";
+
+
     import { writable } from "svelte/store";
 
     let selected;
@@ -46,11 +49,13 @@
     let patToken = "";
     let message = "";
     let messageStore = writable(""); // Use a Svelte store for message
-    let isLoading = false; 
-
+    let isLoading = false;
+    let descriptionChecked = false;
+    let historyChecked = false;
 
     async function handleSubmit() {
         isLoading = true; // Set loading state to true when form is submitted
+
         const response = await fetch("/api/changelog", {
             method: "POST",
             headers: {
@@ -61,6 +66,8 @@
                 queryLink,
                 patToken,
                 model: selected,
+                includeDescription: descriptionChecked,
+                includeHistory: historyChecked, 
             }),
         });
         const data = await response.json();
@@ -126,6 +133,12 @@
             required
         />
     </div>
+    <Checkbox bind:checked={descriptionChecked} aria-describedby="helper-checkbox-description">Description</Checkbox>
+    <Helper id="helper-checkbox-description" class="pl-6">Add the description of the work items (This may use more tokens)</Helper>
+    
+    <Checkbox bind:checked={historyChecked} aria-describedby="helper-checkbox-history">History</Checkbox>
+    <Helper id="helper-checkbox-history" class="pl-6">Add the History of the work items (This may use more tokens)</Helper>
+
     <br />
     <!-- Add the new buttons -->
     <Button on:click={downloadChangelog} variant="secondary"
