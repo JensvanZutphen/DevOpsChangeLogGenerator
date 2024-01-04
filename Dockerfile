@@ -1,5 +1,5 @@
 # Use a specific version of Node.js known to work well with your dependencies
-FROM node:16-slim AS build
+FROM node:20-slim AS build
 
 # Set the working directory in the Docker container
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Multi-stage build: Use a fresh image for the runtime
-FROM node:16-slim
+FROM node:20-slim
 
 WORKDIR /app
 
