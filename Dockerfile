@@ -25,7 +25,7 @@ WORKDIR /app
 COPY --from=build /app .
 
 # Expose the port your app runs on
-EXPOSE 5000
+EXPOSE 3000
 
 # Start the application
 CMD [ "npm", "run", "start" ]
