@@ -1,5 +1,5 @@
 # Specify a more precise base image
-FROM node:20.13.0-slim as build
+FROM node:20 as build
 
 WORKDIR /app
 
