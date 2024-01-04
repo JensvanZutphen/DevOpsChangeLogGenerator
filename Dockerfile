@@ -8,13 +8,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --loglevel verbose
 
 # Copy the rest of the application's source code
 COPY . .
 
 # Build the application using Vite
-RUN npm run build
+RUN npm run build --loglevel verbose
 
 # Multi-stage build: Use a fresh image for the runtime
 FROM node:20-slim
