@@ -20,4 +20,4 @@ jobs:
         with:
           context: /
           push: true
-          tags: jensvanzutphen:latest
+          tags: jensvanzutphen/devopschangelog:latest
