@@ -14,7 +14,9 @@ RUN npm install --loglevel verbose
 COPY . .
 
 # Build the application using Vite
+RUN npm install esbuild@0.19.11 --loglevel verbose
 RUN npm run build --loglevel verbose
+
 
 # Multi-stage build: Use a fresh image for the runtime
 FROM node:20-slim
