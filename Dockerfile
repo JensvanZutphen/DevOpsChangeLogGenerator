@@ -14,7 +14,7 @@ COPY . .
 RUN npm run build
 
 # Multi-stage build: Use a fresh image for the runtime
-FROM node:20.13.0-slim
+FROM node:20
 
 WORKDIR /app
 
