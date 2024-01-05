@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import {
         Input,
         Label,
@@ -11,7 +11,7 @@
 
     import { writable } from "svelte/store";
 
-    let selected;
+    let selected: any;
 
     let models = [
         {
@@ -127,7 +127,9 @@
                 ",left=" +
                 (screen.width - 840),
         );
-        win.document.body.innerHTML = $messageStore;
+        if (win) {
+            win.document.body.innerHTML = $messageStore;
+        }
     }
 </script>
 

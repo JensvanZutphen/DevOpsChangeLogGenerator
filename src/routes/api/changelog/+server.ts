@@ -61,7 +61,7 @@ export async function POST({ request }) {
     }
 
     // Fetch work item details
-    const workItemDetails: WorkItemDetails[] = await Promise.all(data['workItems'].map(async (item: WorkItem) => {
+    const workItemDetails: WorkItemDetails[] = await Promise.all((data?.workItems || []).map(async (item: WorkItem) => {
         const response = await axios.get(`${item['url']}?$expand=all`, {
             headers: {
                 'Authorization': `Basic ${Buffer.from(`:${patToken}`).toString('base64')}`,
@@ -69,7 +69,7 @@ export async function POST({ request }) {
             }
         });
         return {
-            id: item['url'].split('/').pop(),
+            id: item['url'].split('/').pop() ?? '', // Provide a default empty string value when id is undefined
             fields: {
                 'System.State': response.data.fields['System.State'],
                 'System.Title': response.data.fields['System.Title'],
