@@ -6,9 +6,8 @@
         Select,
         Button,
         Textarea,
-        Checkbox
+        Checkbox,
     } from "flowbite-svelte";
-
 
     import { writable } from "svelte/store";
 
@@ -17,14 +16,48 @@
     let models = [
         {
             value: "openai/gpt-3.5-turbo",
-            name: "OpenRouter/OpenAI: GPT-3.5 Turbo",
+            name: "OpenAI: GPT-3.5 Turbo (Latest)",
         },
         {
-            value: "openai/gpt-3.5-16k",
-            name: "OpenRouter/OpenAI: GPT-3.5 Turbo 16k",
+            value: "openai/gpt-4",
+            name: "OpenAI: GPT-4 (Latest)",
         },
-        { value: "openai/gpt-4", name: "OpenRouter/OpenAI: GPT-4" },
-        { value: "openai/gpt-4-32k", name: "OpenRouter/OpenAI: GPT-4 32k" },
+        {
+            value: "openai/gpt-4-32k",
+            name: "OpenAI: GPT-4 32k (Latest)",
+        },
+        {
+            value: "openai/gpt-3.5-turbo-0613",
+            name: "OpenAI: GPT-3.5 Turbo 0613 (Deprecates Jun 13, 2024)",
+        },
+        {
+            value: "openai/gpt-3.5-turbo-0301",
+            name: "OpenAI: GPT-3.5 Turbo 0301 (Deprecates Jun 13, 2024)",
+        },
+        {
+            value: "openai/gpt-4-0613",
+            name: "OpenAI: GPT-4 0613 (Latest Snapshot)",
+        },
+        {
+            value: "openai/gpt-4-32k-0613",
+            name: "OpenAI: GPT-4 32k 0613 (Latest Snapshot)",
+        },
+        {
+            value: "openai/gpt-4-0314",
+            name: "OpenAI: GPT-4 0314 (Legacy, Deprecates Jun 13, 2024)",
+        },
+        {
+            value: "openai/gpt-4-32k-0314",
+            name: "OpenAI: GPT-4 32k 0314 (Legacy, Deprecates Jun 13, 2024)",
+        },
+        {
+            value: "openai/gpt-4-1106-preview",
+            name: "OpenAI: GPT-4 1106 Preview (Turbo)",
+        },
+        {
+            value: "openai/gpt-4-vision-preview",
+            name: "OpenAI: GPT-4 Vision Preview (Turbo with Vision)",
+        },
         {
             value: "anthropic/claude-2",
             name: "OpenRouter/Anthropic: Claude v2",
@@ -33,14 +66,6 @@
             value: "anthropic/claude-instant-v1",
             name: "OpenRouter/Anthropic: Claude Instant v1",
         },
-        {
-            value: "google/palm-2-chat-bison",
-            name: "OpenRouter/Google: PaLM 2 Bison",
-        },
-        { value: "OpenAI/gpt-3.5-turbo", name: "OpenAI/GPT-3.5 Turbo" },
-        { value: "OpenAI/gpt-3.5-16k", name: "OpenAI/GPT-3.5 Turbo 16k" },
-        { value: "OpenAI/gpt-4", name: "OpenAI/GPT-4" },
-        { value: "OpenAI/gpt-4-32k", name: "OpenAI/GPT-4 32k" },
     ];
 
     let openaiUrl = "";
@@ -67,7 +92,7 @@
                 patToken,
                 model: selected,
                 includeDescription: descriptionChecked,
-                includeHistory: historyChecked, 
+                includeHistory: historyChecked,
             }),
         });
         const data = await response.json();
@@ -80,7 +105,8 @@
         const element = document.createElement("a");
         element.setAttribute(
             "href",
-            "data:text/plain;charset=utf-8," + encodeURIComponent($messageStore)
+            "data:text/plain;charset=utf-8," +
+                encodeURIComponent($messageStore),
         );
         element.setAttribute("download", "changelog.txt");
 
@@ -99,7 +125,7 @@
             "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=200,top=" +
                 (screen.height - 400) +
                 ",left=" +
-                (screen.width - 840)
+                (screen.width - 840),
         );
         win.document.body.innerHTML = $messageStore;
     }
@@ -133,11 +159,21 @@
             required
         />
     </div>
-    <Checkbox bind:checked={descriptionChecked} aria-describedby="helper-checkbox-description">Description</Checkbox>
-    <Helper id="helper-checkbox-description" class="pl-6">Add the description of the work items (This may use more tokens)</Helper>
-    
-    <Checkbox bind:checked={historyChecked} aria-describedby="helper-checkbox-history">History</Checkbox>
-    <Helper id="helper-checkbox-history" class="pl-6">Add the History of the work items (This may use more tokens)</Helper>
+    <Checkbox
+        bind:checked={descriptionChecked}
+        aria-describedby="helper-checkbox-description">Description</Checkbox
+    >
+    <Helper id="helper-checkbox-description" class="pl-6"
+        >Add the description of the work items (This may use more tokens)</Helper
+    >
+
+    <Checkbox
+        bind:checked={historyChecked}
+        aria-describedby="helper-checkbox-history">History</Checkbox
+    >
+    <Helper id="helper-checkbox-history" class="pl-6"
+        >Add the History of the work items (This may use more tokens)</Helper
+    >
 
     <br />
     <!-- Add the new buttons -->
